@@ -16,16 +16,16 @@ def create_app(config_obj):
     return application
 
 
-def register_extensions(appl):
-    api = Api(appl)
-    db.init_app(appl)
+def register_extensions(app):
+    api = Api(app)
+    db.init_app(app)
     api.add_namespace(genre_ns)
     api.add_namespace(movie_ns)
     api.add_namespace(director_ns)
 
 
-application = create_app(Config())
-application.debug = True
+app = create_app(Config())
+app.debug = True
 
 if __name__ == '__main__':
-    application.run(host="127.0.0.1", port=10001, debug=True)
+    app.run(host="127.0.0.0", port=5002, debug=True)
