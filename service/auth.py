@@ -14,30 +14,28 @@ class AuthService:
         user = self.user_service.get_by_username(username)
 
         if user is None:
-            raise Exception()
+            raise Exception("user is None")
 
         if not is_refresh:
             if not self.user_service.compare_password(user.password, password):
                 raise Exception()
 
-            data = {
-                'username': user.username,
-                'role': user.role,
-            }
+        data = {
+            'username': user.username,
+            'role': user.role,
+        }
 
-            min30 = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
-            data['exp'] = calendar.timegm(min30.timetuple())
-            access_token = jwt.encode(data, JWT_SECRET,
-                                      algorithm=JWT_ALGORITHM)
+        min30 = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+        data['exp'] = calendar.timegm(min30.timetuple())
+        access_token = jwt.encode(data, JWT_SECRET,
+                                  algorithm=JWT_ALGORITHM)
 
-            days130 = datetime.datetime.utcnow() + datetime.timedelta(days=130)
-            data['exp'] = calendar.timegm(days130.timetuple())
-            refresh_token = jwt.encode(data, JWT_SECRET,
-                                       algorithm=JWT_ALGORITHM)
-            tokens = {"access_token": access_token,
-                      "refresh_token": refresh_token}
+        days130 = datetime.datetime.utcnow() + datetime.timedelta(days=130)
+        data['exp'] = calendar.timegm(days130.timetuple())
+        refresh_token = jwt.encode(data, JWT_SECRET,
+                                   algorithm=JWT_ALGORITHM)
 
-        return tokens
+        return {"access_token": access_token, "refresh_token": refresh_token}
 
     def verify_token(self, refresh_token):
         data = jwt.decode(jwt=refresh_token, key=JWT_SECRET, algorithms=[

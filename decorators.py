@@ -18,7 +18,7 @@ def auth_required(func):
             print("JWT decoding failed", e)
             abort(401)
 
-        return func(*args, **kwargs)
+        return func(self, *args, **kwargs)
 
     return wrapper
 
@@ -39,6 +39,6 @@ def admin_required(func):
             print("JWT decoding failed", e)
             abort(401)
 
-        return func(*args, **kwargs)
+        return func(self, *args, **kwargs)
 
     return wrapper
